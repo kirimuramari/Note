@@ -1,39 +1,24 @@
 import { View, Text, StyleSheet,ScrollView,TouchableOpacity,TextInput } from "react-native";
+import { addForm } from "./addForm";
+import { commonStyles } from "../style/style";
 
 export default function Add() {
-    return (
-        <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.container}>
-            <Text style={styles.text}>タイトル</Text>
+return (
+    <View>
+        <ScrollView contentContainerStyle={commonStyles.container}>
+        <View style={commonStyles.container}>
+            <Text style={commonStyles.text}>タイトル</Text>
         </View>
-        <View>
-            <Text>商品名</Text>
-            <TextInput/>
-            <Text>金額</Text>
-            <TextInput/>
-            <Text>円</Text>
-            <Text>個数</Text>
-            <TextInput/>
-            <Text>個</Text>
-            <Text>合計</Text>
-            <TextInput/>
-            <Text>円</Text>
-        </View>
-            
-            </ScrollView>
-    );
+<addForm />
+<View>
+    <TouchableOpacity>
+        <Text>登録する</Text>
+    </TouchableOpacity>
+    <TouchableOpacity>
+        <Text>キャンセル</Text>
+    </TouchableOpacity>
+</View>
+        </ScrollView>
+    </View>
+)
 }
-    const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-  },
-    text:{
-    fontSize:20,
-    color:"#747575",
-    marginTop:20,
-    marginBottom:10,
-  },
-  label:{}
-});
