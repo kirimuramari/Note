@@ -1,6 +1,6 @@
 import {useState} from "react";
 import { View, Text, StyleSheet,ScrollView,TouchableOpacity,TextInput } from "react-native";
-import { commonStyles } from "../style/style";
+import { commonStyles } from "../../style/style";
 
 export default function Add() {
     const [name,setName] = useState("");
