@@ -9,7 +9,7 @@ export default function App() {
       <ScrollView contentContainerStyle={commonStyles.container}>
         <Text style={commonStyles.text}>コンテンツ</Text>
           <View style={styles.row}>
-            <Link href="/add">
+            <Link href="component/add" asChild>
               <TouchableOpacity style={styles.button}>
               <Text style={commonStyles.buttonText}>登録</Text>
               </TouchableOpacity>
