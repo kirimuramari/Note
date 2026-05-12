@@ -1,4 +1,6 @@
+import { supabase } from "../../lib/supabase";
 import {useState} from "react";
+
 import { View, Text, StyleSheet,ScrollView,TouchableOpacity,TextInput } from "react-native";
 import { commonStyles } from "../../style/style";
 
@@ -26,12 +28,26 @@ export default function Add() {
     return true;
   };
 
-const handleRegister = () => {
+const handleRegister = async() => {
     const isValid = validate();
     if (!isValid) {
         return;
     }
-    console.log("登録可能");
+    const {error} = await supabase
+    .from("Note")
+    .insert([
+        {
+        name:name,
+        amount:Number(amount),
+        number:Number(number),
+        total:total,
+    },
+    ]);
+    if (error) {
+        setError("登録に失敗しました");
+        console.error(error);
+        return;
+    }
     
 };
 
