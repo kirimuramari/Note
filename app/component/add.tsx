@@ -43,17 +43,20 @@ return (
         </View>
 
         <View>
-            <Text>商品名</Text>
-            <TextInput placeholder="商品名" value={name} onChangeText={setName}/>
-            <Text>金額</Text>
-            <TextInput />
-            <TextInput placeholder="金額" value={amount} onChangeText={setAmount}/>
-            <Text>円</Text>
-            <Text>個数</Text>
-            <TextInput placeholder="個数" value={number} onChangeText={setNumber}/>
-            <TextInput/>
-            <Text>個</Text>
-            <Text>合計:{total}円</Text>
+		<Text style={style.Text}>商品名</Text>
+            <TextInput  value={name} onChangeText={setName} style={style.TextInput}/>
+                <Text style={style.Text}>金額</Text>
+            <View style={style.row}>
+                    <TextInput  value={amount} onChangeText={setAmount} style={style.TextInput}/>
+                    <Text style={style.fontSize}>円</Text>
+            </View>
+            <Text style={style.Text}>個数</Text>
+            <View style={style.row}>
+            <TextInput  value={number} onChangeText={setNumber} style={style.TextInput}/>
+            <Text style={style.fontSize}>個</Text>
+
+            </View>
+            <Text style={style.Text}>合計:{total}円</Text>
         </View>
 
 
@@ -71,6 +74,27 @@ return (
 )
 }
 const style = StyleSheet.create({
+    TextInput:{
+        borderWidth:2,
+        borderColor:"#d1d5db",
+        borderRadius:8,
+        padding:10,
+        marginBottom:15,
+        fontSize:16,
+        width:"auto",
+        alignSelf:"flex-start"
+    },
+    Text:{
+        fontSize:18,
+    },
+     row:{
+    flexDirection:"row",
+    flexWrap:"wrap",
+    alignItems:"flex-end",
+  },
+  fontSize:{
+    fontSize:18
+  },
     button:{
         backgroundColor:"#3b82f6",
         paddingVertical:10,
