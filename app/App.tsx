@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View,ScrollView,TouchableOpacity } from 'react-native';
 import { Link } from "expo-router";
-import { commonStyles } from "./style/style";
+import { commonStyles } from "../style/style";
 
 export default function App() {
   return (
@@ -9,7 +9,7 @@ export default function App() {
       <ScrollView contentContainerStyle={commonStyles.container}>
         <Text style={commonStyles.text}>コンテンツ</Text>
           <View style={styles.row}>
-            <Link href="/add">
+            <Link href="/component/add" asChild>
               <TouchableOpacity style={styles.button}>
               <Text style={commonStyles.buttonText}>登録</Text>
               </TouchableOpacity>
