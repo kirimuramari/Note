@@ -2,7 +2,7 @@ import { supabase } from "../../lib/supabase";
 import {useState} from "react";
 import { View, Text, StyleSheet,ScrollView,TouchableOpacity,TextInput } from "react-native";
 import { commonStyles } from "../../style/style";
-import AppSnackbar from "./form/AppSnackbar";
+import AppSnackbar, { SnackbarType } from "./form/AppSnackbar";
 
 export default function Add() {
     const [name,setName] = useState("");
@@ -12,23 +12,28 @@ export default function Add() {
   const [error, setError] = useState("");
   const [snackbarVisible, setSnackbarVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
 
-const showSnackbar = (message:string) => {
+const showSnackbar = (
+    message:string,
+    type:SnackbarType
+) => {
     setSnackbarMessage(message);
+    setSnackbarType(type);
     setSnackbarVisible(true);
 };
 
   const validate = () => {
     if (!name.trim()) {
-      showSnackbar("商品名を入力してください");
+      showSnackbar("商品名を入力してください","error");
       return false;
     }
     if (Number(amount) <= 0) {
-      showSnackbar("金額は1円以上です");
+      showSnackbar("金額は1円以上です","error");
       return false;
     }
     if (Number(number) <= 0) {
-      showSnackbar("個数は１以上です");
+      showSnackbar("個数は１以上です","error");
       return false;
     }
     setError("");
@@ -51,11 +56,11 @@ const handleRegister = async() => {
     },
     ]);
     if (error) {
-        showSnackbar("登録に失敗しました");
+        showSnackbar("登録に失敗しました","error");
         console.error(error);
         return;
     }
-    showSnackbar("登録に成功しました");
+    showSnackbar("登録に成功しました","success");
     setName("");
     setAmount("");
     setNumber("");
@@ -100,6 +105,7 @@ return (
     visible={snackbarVisible}
     message={snackbarMessage}
     onDismiss={() => setSnackbarVisible(false)}
+    type={snackbarType}
 />
     </View>
 
