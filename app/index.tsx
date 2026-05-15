@@ -14,9 +14,11 @@ export default function Home() {
               <Text style={commonStyles.buttonText}>登録</Text>
             </TouchableOpacity>
           </Link>
-          <TouchableOpacity style={styles.button}>
-            <Text style={commonStyles.buttonText}>確認</Text>
-          </TouchableOpacity>
+           <Link href="/component/list" asChild>
+                        <TouchableOpacity style={styles.button}>
+                          <Text style={commonStyles.buttonText}>確認</Text>
+                      </TouchableOpacity>
+            </Link>
         </View>
       </ScrollView>
     </View>
