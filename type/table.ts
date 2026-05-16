@@ -6,3 +6,8 @@ export type Form ={
     number:number;
     total:number;
 };
+
+export type DateGroup = {
+    date: string;
+    items: Form[];
+}

@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
-import { View,Text,TouchableOpacity,StyleSheet,FlatList } from "react-native";
+import { FlatList } from "react-native";
 import { supabase } from "../../lib/supabase";
-import type{ Form } from "../../type/table";
-import { formatMonthDay,getDateKey } from "./form/date";
+import type{ DateGroup } from "../../type/table";
+import { groupByDate } from "./utils/groupByDate";
 import { commonStyles } from "../../style/style";
+import DateGroupItem from "./List/DateGroupItem";
+type GroupedNotes = DateGroup[];
 
-type GroupedNotes = {
-    [date:string]:Form[];
-};
 
 export default function List(){
-    const [groupedNotes, setGroupedNotes] = useState<GroupedNotes>({});
+    const [groupedNotes, setGroupedNotes] = useState<GroupedNotes>([]);
     const [openDates, setOpenDates] = useState<string[]>([]);
 
     useEffect(() => {
@@ -28,16 +27,7 @@ export default function List(){
         const grouped = groupByDate(data ?? []);
         setGroupedNotes(grouped);
     };
-    const groupByDate = (notes:Form[]): GroupedNotes => {
-        return notes.reduce((acc,note) => {
-            const dateKey = getDateKey(note.day);
-            if (!acc[dateKey]) {
-                acc[dateKey] = [];
-            }
-            acc[dateKey].push(note);
-            return acc;
-        }, {} as GroupedNotes);
-    };
+
     const toggleDate = (date: string) => {
         setOpenDates((prev) =>
         prev.includes(date)
@@ -46,41 +36,23 @@ export default function List(){
     );
     };
 
-    const dates = Object.keys(groupedNotes);
     return (
  
         <FlatList
         style={commonStyles.FlatList}
-        data={dates}
-        keyExtractor={(item) => item}
-        renderItem={({item:date}) => {
-            const isOpen = openDates.includes(date);
-          
-            
-            return (
-                <View style={commonStyles.container}>
-                    <TouchableOpacity
-                    onPress={() => toggleDate(date)}
-                    >
-                        <Text style={commonStyles.text}>
-                            
-                            {formatMonthDay(date)} {isOpen ? "▼" : "▶"}
-                        </Text>
-                    </TouchableOpacity>
-                    {isOpen && (
-                        <View>
-                            {groupedNotes[date].map((note) => (
-                                <View key={note.id}>
-                                    <Text style={commonStyles.text}>
-                                        {note.name}
-                                    </Text>
-                                    </View>
-                            ))}
-                            </View>
-                    )}
-                </View>
-            );
-        }}
+        data={groupedNotes}
+        keyExtractor={(item) => item.date}
+        renderItem={({item}) => (
+            <DateGroupItem
+            date={item.date}
+            items={item.items}
+            isOpen={openDates.includes(item.date)}
+            onToggle={() =>
+                toggleDate
+            }
+           
         />
+    )}
+    />
     );
 }
