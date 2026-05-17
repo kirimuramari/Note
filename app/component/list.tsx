@@ -1,16 +1,28 @@
 import { useEffect, useState } from "react";
-import { FlatList } from "react-native";
+import { View,FlatList } from "react-native";
 import { supabase } from "../../lib/supabase";
-import type{ DateGroup } from "../../type/table";
-import { groupByDate } from "./utils/groupByDate";
+import { groupByDate,DateGroup } from "./utils/groupByDate";
 import { commonStyles } from "../../style/style";
 import DateGroupItem from "./List/DateGroupItem";
-type GroupedNotes = DateGroup[];
+import NoteDatailModal from './List/NoteDetailModal';
+import { Form } from "@/type/type";
 
 
 export default function List(){
-    const [groupedNotes, setGroupedNotes] = useState<GroupedNotes>([]);
+    const [groupedNotes, setGroupedNotes] = useState<DateGroup[]>([]);
     const [openDates, setOpenDates] = useState<string[]>([]);
+    const [selectedNote,setSelectedNote] = useState<Form | null>(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    
+    const handleOpenNote = (note: Form) => {
+           setSelectedNote(note);
+           setIsModalVisible(true);
+       };
+
+    const handleCloseModal = () => {
+        setIsModalVisible(false);
+        setSelectedNote(null);
+    };
 
     useEffect(() => {
         fetchNotes();
@@ -37,22 +49,28 @@ export default function List(){
     };
 
     return (
- 
-        <FlatList
-        style={commonStyles.FlatList}
-        data={groupedNotes}
-        keyExtractor={(item) => item.date}
-        renderItem={({item}) => (
+        <View>
+            <FlatList
+            style={commonStyles.FlatList}
+            data={groupedNotes}
+            keyExtractor={(item) => item.date}
+            renderItem={({item}) => (
             <DateGroupItem
             date={item.date}
             items={item.items}
             isOpen={openDates.includes(item.date)}
             onToggle={() =>
-                toggleDate
+                toggleDate(item.date)
             }
-           
+            onPressNote={handleOpenNote}
         />
     )}
     />
+    <NoteDatailModal
+    visible={isModalVisible}
+    note={selectedNote}
+    onClose={handleCloseModal}
+    />
+    </View>
     );
 }
