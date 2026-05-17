@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import { supabase } from "../../lib/supabase";
-import type{ DateGroup } from "../../type/table";
-import { groupByDate } from "./utils/groupByDate";
+import { groupByDate,DateGroup } from "./utils/groupByDate";
 import { commonStyles } from "../../style/style";
 import DateGroupItem from "./List/DateGroupItem";
-type GroupedNotes = DateGroup[];
 
 
 export default function List(){
-    const [groupedNotes, setGroupedNotes] = useState<GroupedNotes>([]);
+    const [groupedNotes, setGroupedNotes] = useState<DateGroup[]>([]);
     const [openDates, setOpenDates] = useState<string[]>([]);
 
     useEffect(() => {
@@ -48,7 +46,7 @@ export default function List(){
             items={item.items}
             isOpen={openDates.includes(item.date)}
             onToggle={() =>
-                toggleDate
+                toggleDate(item.date)
             }
            
         />

@@ -1,16 +1,22 @@
-import { DateGroup,Form } from "@/type/table";
+import { Form } from "@/type/type";
+import { getDateKey } from "./formatDate";
+
+export type DateGroup = {
+    date: string;
+    items: Form[];
+};
 
 export const groupByDate = (
-    items:Form[]
-):DateGroup[] => {
+    notes: Form[]
+): DateGroup[] => {
     const grouped: Record<string, Form[]> = {};
 
-    items.forEach((item) => {
-        const date = item.day;
+    notes.forEach((note) => {
+        const date = getDateKey(note.day);
         if (!grouped[date]) {
             grouped[date] = [];
         }
-        grouped[date].push(item);
+        grouped[date].push(note);
     });
     return Object.entries(grouped)
     .map(([date, items]) => ({

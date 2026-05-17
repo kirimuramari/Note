@@ -1,7 +1,7 @@
 import { View,Text,TouchableOpacity } from "react-native";
 import { commonStyles } from "@/style/style";
 import { formatMonthDay } from "../utils/formatDate";
-import { Form } from "@/type/table";
+import { Form } from "@/type/type";
 
 type Props ={
     date:string;

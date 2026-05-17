@@ -1,7 +1,6 @@
-import type{Form,DateGroup} from "../../../type/table";
 
-export const getDateKey = (deteString: string) => {
-    return deteString.split("T")[0];
+export const getDateKey = (dateString: string) => {
+    return dateString.split("T")[0];
 }
 
 export const formatMonthDay = (dateString: string) => {
