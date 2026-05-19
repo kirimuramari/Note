@@ -1,5 +1,5 @@
 import { useState,useEffect } from "react";
-import { Modal, View,Text,TouchableOpacity,TextInput } from "react-native";
+import { Modal, View,Text,TouchableOpacity,TextInput,Alert } from "react-native";
 import { Form } from "@/type/type";
 import { supabase } from "@/lib/supabase";
 import { SnackbarType } from "../form/AppSnackbar";
@@ -39,7 +39,7 @@ export default function NoteDetailModal({
     const handleSave = async () => {
         if (!note) return;
 
-        const { data,error } = await supabase
+        const { error } = await supabase
         .from("Note")
         .update({
             name:editName,
@@ -54,10 +54,8 @@ export default function NoteDetailModal({
             : Number(editNumber) * Number(editAmount),
         })
         .eq("id", note.id);
-        console.log(data);
         
         if (error) {
-            console.error(error);
             showSnackbar("更新に失敗しました", "error");
             return;
             
@@ -65,8 +63,44 @@ export default function NoteDetailModal({
         onSaved();
         showSnackbar("更新に成功しました", "success");
         setIsEditing(false);
-        console.log(typeof note.id);
-console.log(note.id);
+        onClose();  
+    };
+
+    const confirmDelete = () => {
+        Alert.alert(
+            "削除確認",
+            "本当に削除しますか？",
+            [
+                {
+                    text: "キャンセル",
+                    style: "cancel"
+                },
+                {
+                    text: "削除",
+                    style:"destructive",
+                    onPress: handleDelete,
+                }
+            ]
+        );
+    };
+
+        const handleDelete = async() => {
+                    if (!note) return;
+ const { error } = await supabase
+        .from("Note")
+        .delete()
+        .eq("id",note.id);
+
+        if (error) {
+            console.error(error);
+
+            showSnackbar("削除に失敗しました", "error");
+            return;
+        }
+        onSaved();
+        showSnackbar("削除しました", "success");
+        onClose();    
+    
         };
         return (
             <Modal 
@@ -89,7 +123,12 @@ console.log(note.id);
                         >
                             <Text>編集</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                        onPress={
+                            confirmDelete
+
+                        }
+                        >
                             <Text>削除</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={onClose}>
