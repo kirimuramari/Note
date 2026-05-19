@@ -6,6 +6,7 @@ import { commonStyles } from "../../style/style";
 import DateGroupItem from "./List/DateGroupItem";
 import NoteDatailModal from './List/NoteDetailModal';
 import { Form } from "@/type/type";
+import AppSnackbar, { SnackbarType } from "./form/AppSnackbar";
 
 
 export default function List(){
@@ -13,7 +14,10 @@ export default function List(){
     const [openDates, setOpenDates] = useState<string[]>([]);
     const [selectedNote,setSelectedNote] = useState<Form | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
-    
+      const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
+
     const handleOpenNote = (note: Form) => {
            setSelectedNote(note);
            setIsModalVisible(true);
@@ -24,6 +28,15 @@ export default function List(){
         setSelectedNote(null);
     };
 
+    const showSnackbar = (
+        message:string,
+        type:SnackbarType
+    ) => {
+        setSnackbarMessage(message);
+        setSnackbarType(type);
+        setSnackbarVisible(true);
+    }
+    
     useEffect(() => {
         fetchNotes();
     },[]);
@@ -70,6 +83,14 @@ export default function List(){
     visible={isModalVisible}
     note={selectedNote}
     onClose={handleCloseModal}
+    onSaved={fetchNotes}
+    showSnackbar={showSnackbar}
+    />
+    <AppSnackbar
+        visible={snackbarVisible}
+        message={snackbarMessage}
+        onDismiss={() => setSnackbarVisible(false)}
+        type={snackbarType}
     />
     </View>
     );
