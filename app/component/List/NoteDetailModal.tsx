@@ -3,6 +3,7 @@ import { Modal, View,Text,TouchableOpacity,TextInput,Alert } from "react-native"
 import { Form } from "@/type/type";
 import { supabase } from "@/lib/supabase";
 import { SnackbarType } from "../form/AppSnackbar";
+import ConfirmDialog from "./ConfirmDialog";
 
 type Props = {
     visible: boolean;
@@ -26,6 +27,7 @@ export default function NoteDetailModal({
     const [editName,setEditName] = useState("");
     const [editNumber, setEditNumber] = useState("");
     const [editAmount, setEditAmount] = useState("");
+    const [isDeleteConfirm, setIsDeleteConfirm] = useState(false);
 
     useEffect(() => {
         if (!note) return;
@@ -66,25 +68,7 @@ export default function NoteDetailModal({
         onClose();  
     };
 
-    const confirmDelete = () => {
-        Alert.alert(
-            "削除確認",
-            "本当に削除しますか？",
-            [
-                {
-                    text: "キャンセル",
-                    style: "cancel"
-                },
-                {
-                    text: "削除",
-                    style:"destructive",
-                    onPress: handleDelete,
-                }
-            ]
-        );
-    };
-
-        const handleDelete = async() => {
+   const handleDelete = async() => {
                     if (!note) return;
  const { error } = await supabase
         .from("Note")
@@ -102,6 +86,7 @@ export default function NoteDetailModal({
         onClose();    
     
         };
+
         return (
             <Modal 
             visible={visible}
@@ -124,10 +109,7 @@ export default function NoteDetailModal({
                             <Text>編集</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                        onPress={
-                            confirmDelete
-
-                        }
+                        onPress={() => setIsDeleteConfirm(true)}
                         >
                             <Text>削除</Text>
                         </TouchableOpacity>
@@ -168,7 +150,17 @@ export default function NoteDetailModal({
                         </View>
                     )}
                 </View>
+                <ConfirmDialog
+                visible={isDeleteConfirm}
+                title="削除確認"
+                message="本当に削除しますか?"
+                confirmText="削除"
+                cancelText="キャンセル"
+                onConfirm={handleDelete}
+                onCancel={() => setIsDeleteConfirm(false)}
+                />
             </Modal>
+
         )
     }
 
